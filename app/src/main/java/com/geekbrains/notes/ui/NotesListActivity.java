@@ -54,6 +54,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         // Intent intent = getIntent();
         if(resultCode==RESULT_OK)
         {
+            assert data != null;
             Note note = (Note) data.getSerializableExtra(Note.NOTE);
             repo.update(note);
             adapter.setNotes(repo.getAll());
