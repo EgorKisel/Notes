@@ -9,13 +9,13 @@
         android:id="@+id/note_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="@dimen/textSizeNoteTitle"
         tools:text="Title"/>
     <EditText
         android:id="@+id/note_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="@dimen/textSizeNoteDescription"
         tools:text="Description"/>
 
     <com.google.android.material.button.MaterialButton
