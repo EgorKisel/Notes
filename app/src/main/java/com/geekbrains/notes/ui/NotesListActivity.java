@@ -51,5 +51,12 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Intent intent = getIntent();
+        if(resultCode==RESULT_OK)
+        {
+            Note note = (Note) data.getSerializableExtra(Note.NOTE);
+            repo.update(note);
+            adapter.setNotes(repo.getAll());
+        }
     }
 }
