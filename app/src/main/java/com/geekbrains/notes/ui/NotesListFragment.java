@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geekbrains.notes.R;
+import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
 import com.geekbrains.notes.data.Repo;
@@ -49,6 +50,15 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
 
     @Override
     public void onNoteClick(Note note) {
-
+        if (getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            ((Controller) requireActivity()).openEditNoteFragmentLandscape(note);
+        } else {
+            ((Controller) requireActivity()).openEditNoteFragment(note);
+        }
+    }
+    public void refresh() {
+        if(adapter != null)
+            adapter.notifyDataSetChanged();
     }
 }
