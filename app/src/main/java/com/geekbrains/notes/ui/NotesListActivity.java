@@ -52,8 +52,8 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         startActivityForResult(editNoteIntent, EDIT_NOTE_REQUEST);
     }
 
-    // TODO написать функцию обработки возвращаемой заметки - добавить её в
-    //  репо и обновить данные в адаптере данными из репо
+    // Функция обработки возвращаемой заметки - добавляем её в
+    //  репо и обновляем данные в адаптере данными из репо
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

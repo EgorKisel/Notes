@@ -2,4 +2,5 @@
 <resources>
     <dimen name="textSizeNoteTitle">24sp</dimen>
     <dimen name="textSizeNoteDescription">20sp</dimen>
+    <dimen name="default_pudding">16dp</dimen>
 </resources>

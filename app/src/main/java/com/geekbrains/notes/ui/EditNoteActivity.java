@@ -28,7 +28,7 @@ public class EditNoteActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         note = (Note) getIntent().getSerializableExtra(Note.NOTE);
 
-        // TODO создать внешний вид для редактирования заметки
+        // Внешний вид для редактирования заметки
 
         setContentView(R.layout.activity_edit_note);
         title = findViewById(R.id.edit_note_title);
@@ -43,7 +43,7 @@ public class EditNoteActivity extends AppCompatActivity{
     }
 
 
-    // TODO написать возвращение отредактированной заметки в NotesListActivity
+    // Возвращение отредактированной заметки в NotesListActivity
 
 
     public void saveNote() {
