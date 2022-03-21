@@ -1,55 +1,66 @@
 package com.geekbrains.notes.ui;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-
 import com.geekbrains.notes.R;
-import com.geekbrains.notes.data.InMemoryRepoImp;
+import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.Note;
-import com.geekbrains.notes.data.Repo;
-import com.geekbrains.notes.recycler.NotesAdapter;
 
-public class NotesListActivity extends AppCompatActivity implements NotesAdapter.onNoteClickListener {
+public class NotesListActivity extends AppCompatActivity implements Controller {
 
-    private RecyclerView list;
-    private Repo repo = InMemoryRepoImp.getInstance();
-    private NotesAdapter adapter;
+    private FragmentManager manager;
+    public static final String DEFAULT_FRAGMENT = "DEFAULT_FRAGMENT";
+    public static final String LANDSCAPE_FRAGMENT = "LANDSCAPE_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_list);
-        list = findViewById(R.id.list);
-        adapter = new NotesAdapter();
-        adapter.setOnNoteClickListener(this);
-        adapter.setNotes(repo.getAll());
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        list.setAdapter(adapter);
-        list.setLayoutManager(new LinearLayoutManager(this));
+
+        manager = getSupportFragmentManager();
+        if (savedInstanceState == null){
+            manager
+                    .beginTransaction()
+                    .replace(R.id.list_container, new NotesListFragment(), DEFAULT_FRAGMENT)
+                    .commit();
+        }
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT &&
+                manager.getBackStackEntryCount() > 1) {
+            manager.popBackStack();
+        }
     }
 
-    public static final int EDIT_NOTE_REQUEST = 66;
-
     @Override
-    public void onNoteClick(Note note) {
-        Log.d("happy", note.getDescription());
-
-        Intent editNoteIntent = new Intent(this, EditNoteActivity.class);
-        editNoteIntent.putExtra(Note.NOTE, note);
-        startActivityForResult(editNoteIntent, EDIT_NOTE_REQUEST);
+    public void openEditNoteFragment(Note note) {
+        manager
+                .beginTransaction()
+                .replace(R.id.list_container, EditNoteFragment.getInstance(note))
+                .addToBackStack(null)
+                .commit();
     }
 
-    // TODO написать функцию обработки возвращаемой заметки - добавить её в
-    //  репо и обновить данные в адаптере данными из репо
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void buttonSavePressed() {
+        manager.popBackStack();
+        if(manager.findFragmentByTag(DEFAULT_FRAGMENT) != null)
+            ((NotesListFragment)manager.findFragmentByTag(DEFAULT_FRAGMENT)).refresh();
+
+        if (getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE && manager.findFragmentByTag(LANDSCAPE_FRAGMENT) != null)
+            manager
+                    .beginTransaction()
+                    .remove(manager.findFragmentByTag(LANDSCAPE_FRAGMENT))
+                    .commit();
+    }
+
+    @Override
+    public void openEditNoteFragmentLandscape(Note note) {
+        manager
+                .beginTransaction()
+                .replace(R.id.fragment_edit_note_container, EditNoteFragment.getInstance(note), LANDSCAPE_FRAGMENT)
+                .commit();
     }
 }
