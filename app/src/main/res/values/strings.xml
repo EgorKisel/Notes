@@ -4,4 +4,7 @@
     <string name="note_subject_hint">Заголовок</string>
     <string name="text_hint">Текст заметки</string>
     <string name="save_button">Сохранить</string>
+    <string name="menu_add">Add note</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_sort">Sort</string>
 </resources>
