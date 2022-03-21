@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_send"
+        android:title="@string/menu_send"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_send_24"/>
+    <item
+        android:id="@+id/menu_add_photo"
+        android:title="@string/menu_add_photo"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_add_a_photo_24"/>
+</menu>

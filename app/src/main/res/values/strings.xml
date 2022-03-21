@@ -7,4 +7,6 @@
     <string name="menu_add">Add note</string>
     <string name="menu_search">Search</string>
     <string name="menu_sort">Sort</string>
+    <string name="menu_send">Send</string>
+    <string name="menu_add_photo">Add photo</string>
 </resources>
