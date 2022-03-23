@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,6 +29,10 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
     private NotesAdapter adapter;
     private Repo repo = InMemoryRepoImp.getInstance();
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -63,4 +68,5 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
         if(adapter != null)
             adapter.notifyDataSetChanged();
     }
+
 }

@@ -8,4 +8,5 @@ public interface Repo {
     void update (Note note);
     void delete (int id);
     List<Note> getAll();
+
 }

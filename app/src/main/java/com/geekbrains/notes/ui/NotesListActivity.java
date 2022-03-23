@@ -2,6 +2,7 @@ package com.geekbrains.notes.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.res.Configuration;
@@ -13,12 +14,15 @@ import android.widget.Toast;
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.Note;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NotesListActivity extends AppCompatActivity implements Controller {
+
 
     private FragmentManager manager;
     public static final String DEFAULT_FRAGMENT = "DEFAULT_FRAGMENT";
     public static final String LANDSCAPE_FRAGMENT = "LANDSCAPE_FRAGMENT";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +81,31 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
         switch (item.getItemId()){
-            case R.id.menu_add:
-                return toast("Add");
+           case R.id.menu_add:
+               fragment = new NoteFragment();
+                break;
             case R.id.menu_search:
-                return toast("Search");
+                fragment = new SearchFragment();
+                break;
             case R.id.menu_sort:
-                return toast("Sort");
+                fragment = new SortFragment();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.list_container, fragment)
+                .addToBackStack(null)
+                .commit();
+        return true;
     }
+
     public boolean toast (String text){
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         return true;
     }
+
+
 }
