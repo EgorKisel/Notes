@@ -121,8 +121,13 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
         Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.menu_add:
-                fragment = new NoteFragment();
-                break;
+                manager
+                        .beginTransaction()
+                        .replace(R.id.list_container, new NoteFragment())
+                        .addToBackStack(null)
+                        .commit();
+//                fragment = new NoteFragment();
+                return true;
             case R.id.menu_search:
                 fragment = new SearchFragment();
                 break;
