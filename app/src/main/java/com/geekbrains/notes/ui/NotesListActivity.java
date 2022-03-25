@@ -19,6 +19,8 @@ import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.Note;
 import com.google.android.material.navigation.NavigationView;
 
+import org.jetbrains.annotations.NotNull;
+
 public class NotesListActivity extends AppCompatActivity implements Controller {
 
 
@@ -49,12 +51,32 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Создаем боковое навигационное меню
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.burger_open, R.string.burger_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case (R.id.nav_about):{
+                        openAboutFragment();
+                        drawerLayout.close();
+                        return true;
+                    }
+                    case (R.id.nav_settings):{
+                        openSettingsFragment();
+                        drawerLayout.close();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -122,66 +144,20 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
         return true;
     }
 
-//    private void initToolbarAndDrawer() {
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        initDrawer(toolbar);
-//    }
-//
-//    private void initDrawer(Toolbar toolbar) {
-//// Находим DrawerLayout
-//        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//// Создаем ActionBarDrawerToggle
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar,
-//                R.string.navigation_drawer_open,
-//                R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//// Обработка навигационного меню
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//                switch (id) {
-//                    case R.id.nav_about:
-//                        openAboutFragment();
-//                        return true;
-//                    case R.id.nav_settings:
-//                        openSettingsFragment();
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
-//        navigationView.setNavigationItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.nav_about:
-//                    openAboutFragment();
-//                    drawer.close();
-//                    return true;
-//                case R.id.nav_settings:
-//                    openSettingsFragment();
-//                    drawer.close();
-//                    return true;
-//            }
-//            return false;
-//        });
-//    }
-//
-//    private void openSettingsFragment() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .addToBackStack("")
-//                .add(R.id.list_container, new SettingsFragment()).commit();
-//    }
-//
-//    private void openAboutFragment() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .addToBackStack("")
-//                .add(R.id.list_container, new AboutFragment()).commit();
-//    }
+
+
+    private void openSettingsFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("")
+                .replace(R.id.list_container, new SettingsFragment()).commit();
+    }
+
+    private void openAboutFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("")
+                .replace(R.id.list_container, new AboutFragment()).commit();
+    }
 
 }
