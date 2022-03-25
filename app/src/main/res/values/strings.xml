@@ -14,4 +14,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_header_title">My Notes</string>
     <string name="nav_header_subtitle">kisel1989@mail.ru</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="burger_open">burger open</string>
+    <string name="burger_close">burger close</string>
 </resources>
