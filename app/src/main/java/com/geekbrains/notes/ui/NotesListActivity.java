@@ -33,9 +33,9 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  initToolbarAndDrawer();
 
         setContentView(R.layout.drawer_main);
+
 
         manager = getSupportFragmentManager();
         if (savedInstanceState == null) {
@@ -62,13 +62,13 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case (R.id.nav_about):{
+                switch (menuItem.getItemId()) {
+                    case (R.id.nav_about): {
                         openAboutFragment();
                         drawerLayout.close();
                         return true;
                     }
-                    case (R.id.nav_settings):{
+                    case (R.id.nav_settings): {
                         openSettingsFragment();
                         drawerLayout.close();
                         return true;
@@ -126,7 +126,6 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
                         .replace(R.id.list_container, new NoteFragment())
                         .addToBackStack(null)
                         .commit();
-//                fragment = new NoteFragment();
                 return true;
             case R.id.menu_search:
                 fragment = new SearchFragment();
@@ -150,7 +149,6 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
     }
 
 
-
     private void openSettingsFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -163,6 +161,16 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
                 .beginTransaction()
                 .addToBackStack("")
                 .replace(R.id.list_container, new AboutFragment()).commit();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (manager.getBackStackEntryCount() == 0)
+            new MyDialogFragment().show(getSupportFragmentManager(), MyDialogFragment.QUIT);
+        else {
+            super.onBackPressed();
+        }
     }
 
 }
