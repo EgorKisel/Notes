@@ -19,4 +19,6 @@
     <string name="burger_open">burger open</string>
     <string name="burger_close">burger close</string>
     <string name="are_you_sure_want_to_exit">Are you sure want to exit?</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
 </resources>
