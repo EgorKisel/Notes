@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class Note implements Serializable {
     public static final String NOTE = "NOTE";
+    private String date;
     private Integer id;
     private String title;
     private String description;
 
-    public Note(String title, String description) {
+    public Note(String title, String description, String date) {
         this.title = title;
         this.description = description;
+        this.date = date;
     }
 
     public Integer getId() {
@@ -35,5 +37,13 @@ public class Note implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

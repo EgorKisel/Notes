@@ -16,17 +16,20 @@ import androidx.fragment.app.FragmentManager;
 
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
+import com.geekbrains.notes.data.DatePickerListener;
 import com.geekbrains.notes.data.Note;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NotesListActivity extends AppCompatActivity implements Controller {
+public class NotesListActivity extends AppCompatActivity implements Controller, DatePickerListener {
 
 
     private FragmentManager manager;
     public static final String DEFAULT_FRAGMENT = "DEFAULT_FRAGMENT";
     public static final String LANDSCAPE_FRAGMENT = "LANDSCAPE_FRAGMENT";
+    public static final String EDIT_NOTE = "EDIT_NOTE";
+    public static final String ADD_NOTE = "ADD_NOTE";
 
 
     @Override
@@ -48,6 +51,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
                 manager.getBackStackEntryCount() > 1) {
             manager.popBackStack();
         }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -172,5 +176,20 @@ public class NotesListActivity extends AppCompatActivity implements Controller {
             super.onBackPressed();
         }
     }
+    @Override
+    public void callDatePicker() {
+        new DatePickerFragment().show(getSupportFragmentManager(), DatePickerFragment.DATE_PICKER);
+    }
 
+    @Override
+    public void sendDatePicker(String date) {
+        if (manager.findFragmentByTag(ADD_NOTE) != null) {
+            EditNoteFragment addNoteFragment = (EditNoteFragment) manager.findFragmentByTag(ADD_NOTE);
+            addNoteFragment.setDate(date);
+        }
+        if (manager.findFragmentByTag(EDIT_NOTE) != null) {
+            NoteFragment noteFragment = (NoteFragment) manager.findFragmentByTag(EDIT_NOTE);
+            noteFragment.setDate(date);
+        }
+    }
 }

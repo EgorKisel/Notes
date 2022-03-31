@@ -9,4 +9,5 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_view_dialog_fragment">15dp</dimen>
+    <dimen name="set_date">15sp</dimen>
 </resources>
