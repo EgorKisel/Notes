@@ -2,6 +2,9 @@ package com.geekbrains.notes.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,14 +13,20 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
 import com.geekbrains.notes.data.Repo;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
-public class EditNoteFragment extends Fragment {
+import org.jetbrains.annotations.NotNull;
+
+public class EditNoteFragment extends Fragment implements NavigationBarView.OnItemSelectedListener {
 
     private Note note;
     private int noteId;
@@ -25,6 +34,8 @@ public class EditNoteFragment extends Fragment {
     private EditText title;
     private EditText description;
     public static final String NOTE = "NOTE";
+    private BottomNavigationView bottomNavigationView;
+
 
     public static Fragment getInstance(Note note) {
         EditNoteFragment editNoteFragment = new EditNoteFragment();
@@ -36,13 +47,15 @@ public class EditNoteFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        bottomNavigationView = view.findViewById(R.id.note_menu);
+        bottomNavigationView.setOnItemSelectedListener(this);
         title = view.findViewById(R.id.edit_note_title);
         description = view.findViewById(R.id.edit_note_description);
 
@@ -75,4 +88,35 @@ public class EditNoteFragment extends Fragment {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+        switch (item.getItemId()){
+            case R.id.menu_send:
+                fragment = new SendFragment();
+                break;
+            case R.id.menu_add_photo:
+                fragment = new AddPhotoFragment();
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
+        MenuItem item = menu.findItem(R.id.menu_add);
+        MenuItem item1 = menu.findItem(R.id.menu_search);
+        MenuItem item2 = menu.findItem(R.id.menu_sort);
+        if (item != null){
+            item.setVisible(false);
+        }
+        if (item1 != null){
+            item1.setVisible(false);
+        }
+        if (item2 != null){
+            item2.setVisible(false);
+        }
+
+    }
 }

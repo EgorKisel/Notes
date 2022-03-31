@@ -50,4 +50,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteHolder> {
     public void setOnNoteClickListener (onNoteClickListener listener){
         this.listener = listener;
     }
+
+    public void create(List<Note> notes, int pos){
+        this.notes = notes;
+        notifyItemInserted(pos);
+    }
 }
