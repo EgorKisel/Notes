@@ -39,9 +39,10 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
     private TextView dateTextView;
     public static final String DATE = "DATE";
     String saveInstanceDate;
+    private String date;
 
 
-    public static Fragment getInstance(Note note) {
+    public static EditNoteFragment getInstance(Note note) {
         EditNoteFragment editNoteFragment = new EditNoteFragment();
         Bundle args = new Bundle();
         args.putSerializable(NOTE, note);
@@ -64,11 +65,11 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
         description = view.findViewById(R.id.edit_note_description);
         dateTextView = view.findViewById(R.id.set_date);
 
-        init(note);
-
-        if (savedInstanceState != null) {
-            saveInstanceDate = savedInstanceState.getString(DATE);
-            dateTextView.setText(saveInstanceDate);
+        if (savedInstanceState == null) {
+            dateTextView.setText(date);
+        } else {
+            date = savedInstanceState.getString(DATE);
+            dateTextView.setText(date);
         }
 
         Button buttonSave = view.findViewById(R.id.save_button);
@@ -87,6 +88,7 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
                 ((DatePickerListener) requireActivity()).callDatePicker();
             }
         });
+        init(note);
     }
 
     //возвращение отредактированной заметки в NotesListFragment (через перезапись в репо)
@@ -103,8 +105,8 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
         note = (Note) args.getSerializable(NOTE);
         title.setText(note.getTitle());
         description.setText(note.getDescription());
-        noteId = note.getId();
         dateTextView.setText(note.getDate());
+        noteId = note.getId();
     }
 
 
@@ -140,13 +142,13 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
 
     }
     void setDate(String date){
-        saveInstanceDate = date;
-        dateTextView.setText(saveInstanceDate);
+        this.date = date;
+        dateTextView.setText(date);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(DATE, saveInstanceDate);
+        outState.putString(DATE, date);
     }
 }

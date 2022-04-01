@@ -22,6 +22,11 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 public class NotesListActivity extends AppCompatActivity implements Controller, DatePickerListener {
 
 
@@ -30,6 +35,9 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
     public static final String LANDSCAPE_FRAGMENT = "LANDSCAPE_FRAGMENT";
     public static final String EDIT_NOTE = "EDIT_NOTE";
     public static final String ADD_NOTE = "ADD_NOTE";
+    private EditNoteFragment editNoteFragment;
+    private NoteFragment noteFragment;
+    private int orientation = ORIENTATION_PORTRAIT;
 
 
     @Override
@@ -41,12 +49,41 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
 
 
         manager = getSupportFragmentManager();
+
+        editNoteFragment = (EditNoteFragment) manager.findFragmentByTag(EDIT_NOTE);
+        noteFragment = (NoteFragment) manager.findFragmentByTag(ADD_NOTE);
+
+
         if (savedInstanceState == null) {
             manager
                     .beginTransaction()
                     .replace(R.id.list_container, new NotesListFragment(), DEFAULT_FRAGMENT)
                     .commit();
         }
+
+        if (editNoteFragment != null) {
+            manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.beginTransaction().remove(editNoteFragment).commit();
+            manager.executePendingTransactions();
+            manager.beginTransaction().replace(
+                    orientation == ORIENTATION_PORTRAIT  ? R.id.list_container : R.id.fragment_edit_note_container,
+                    editNoteFragment, EDIT_NOTE)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        if (noteFragment != null) {
+            manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.beginTransaction().remove(noteFragment).commit();
+            manager.executePendingTransactions();
+            manager.beginTransaction().replace(
+                    orientation == ORIENTATION_PORTRAIT  ? R.id.list_container : R.id.fragment_edit_note_container,
+                    noteFragment, ADD_NOTE)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT &&
                 manager.getBackStackEntryCount() > 1) {
             manager.popBackStack();
@@ -87,7 +124,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
     public void openEditNoteFragment(Note note) {
         manager
                 .beginTransaction()
-                .replace(R.id.list_container, EditNoteFragment.getInstance(note))
+                .replace(R.id.list_container, EditNoteFragment.getInstance(note), EDIT_NOTE)
                 .addToBackStack(null)
                 .commit();
     }
@@ -99,10 +136,10 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
             ((NotesListFragment) manager.findFragmentByTag(DEFAULT_FRAGMENT)).refresh();
 
         if (getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE && manager.findFragmentByTag(LANDSCAPE_FRAGMENT) != null)
+                Configuration.ORIENTATION_LANDSCAPE && manager.findFragmentByTag(EDIT_NOTE) != null)
             manager
                     .beginTransaction()
-                    .remove(manager.findFragmentByTag(LANDSCAPE_FRAGMENT))
+                    .remove(manager.findFragmentByTag(EDIT_NOTE))
                     .commit();
     }
 
@@ -127,7 +164,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
             case R.id.menu_add:
                 manager
                         .beginTransaction()
-                        .replace(R.id.list_container, new NoteFragment())
+                        .replace(R.id.list_container, new NoteFragment(), ADD_NOTE)
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -183,12 +220,12 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
 
     @Override
     public void sendDatePicker(String date) {
-        if (manager.findFragmentByTag(ADD_NOTE) != null) {
-            EditNoteFragment addNoteFragment = (EditNoteFragment) manager.findFragmentByTag(ADD_NOTE);
-            addNoteFragment.setDate(date);
-        }
         if (manager.findFragmentByTag(EDIT_NOTE) != null) {
-            NoteFragment noteFragment = (NoteFragment) manager.findFragmentByTag(EDIT_NOTE);
+            EditNoteFragment editNoteFragment = (EditNoteFragment) manager.findFragmentByTag(EDIT_NOTE);
+            editNoteFragment.setDate(date);
+        }
+        if (manager.findFragmentByTag(ADD_NOTE) != null) {
+            NoteFragment noteFragment = (NoteFragment) manager.findFragmentByTag(ADD_NOTE);
             noteFragment.setDate(date);
         }
     }

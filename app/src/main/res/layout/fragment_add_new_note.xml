@@ -8,7 +8,7 @@
     android:padding="@dimen/default_pudding">
 
     <TextView
-        android:id="@+id/set_date"
+        android:id="@+id/new_set_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12.12.2012"

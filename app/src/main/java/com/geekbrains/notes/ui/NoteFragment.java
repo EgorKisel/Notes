@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.geekbrains.notes.R;
@@ -37,7 +38,7 @@ public class NoteFragment extends Fragment{
     private TextView dateTextView;
     private String date;
     String saveInstanceDate;
-
+    public static final String NOTE = "NOTE";
     public static final String DATE = "DATE";
 
     @Nullable
@@ -51,8 +52,7 @@ public class NoteFragment extends Fragment{
     public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         editTitle = view.findViewById(R.id.new_edit_note_title);
         editDescription = view.findViewById(R.id.new_edit_note_description);
-
-        dateTextView = view.findViewById(R.id.set_date);
+        dateTextView = view.findViewById(R.id.new_set_date);
 
         if (savedInstanceState == null) {
             Date currentDate = new Date();
@@ -61,8 +61,8 @@ public class NoteFragment extends Fragment{
             date = dateFormat.format(currentDate);
             dateTextView.setText(date);
         } else {
-            saveInstanceDate = savedInstanceState.getString(DATE);
-            dateTextView.setText(saveInstanceDate);
+            date = savedInstanceState.getString(DATE);
+            dateTextView.setText(date);
         }
 
 
@@ -89,9 +89,11 @@ public class NoteFragment extends Fragment{
     {
         Note editNote = new Note(editTitle.getText().toString(), editDescription.getText().toString(),
                 dateTextView.getText().toString());
-        if(!(editTitle.getText().toString().equals("") && editDescription.getText().toString().equals("")))
+        if(!(editTitle.getText().toString().equals("") && editDescription.getText().toString().equals(""))){
             repo.create(editNote);
+        }
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
@@ -104,13 +106,13 @@ public class NoteFragment extends Fragment{
     }
 
     void setDate(String date){
-        saveInstanceDate = date;
-        dateTextView.setText(saveInstanceDate);
+        this.date = date;
+        dateTextView.setText(date);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(DATE, saveInstanceDate);
+        outState.putString(DATE, date);
     }
 }
