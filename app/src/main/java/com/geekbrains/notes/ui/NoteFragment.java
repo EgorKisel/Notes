@@ -9,26 +9,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
+import com.geekbrains.notes.data.DatePickerListener;
 import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
 import com.geekbrains.notes.data.Repo;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class NoteFragment extends Fragment{
     private Repo repo = InMemoryRepoImp.getInstance();
     private EditText editTitle;
     private EditText editDescription;
+    private TextView dateTextView;
+    private String date;
+    String saveInstanceDate;
+    public static final String NOTE = "NOTE";
+    public static final String DATE = "DATE";
 
     @Nullable
     @Override
@@ -41,6 +52,20 @@ public class NoteFragment extends Fragment{
     public void onViewCreated(@NonNull @NotNull View view, @Nullable Bundle savedInstanceState) {
         editTitle = view.findViewById(R.id.new_edit_note_title);
         editDescription = view.findViewById(R.id.new_edit_note_description);
+        dateTextView = view.findViewById(R.id.new_set_date);
+
+        if (savedInstanceState == null) {
+            Date currentDate = new Date();
+
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+            date = dateFormat.format(currentDate);
+            dateTextView.setText(date);
+        } else {
+            date = savedInstanceState.getString(DATE);
+            dateTextView.setText(date);
+        }
+
+
 
         Button buttonSave = view.findViewById(R.id.new_save_button);
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -51,14 +76,24 @@ public class NoteFragment extends Fragment{
                 Toast.makeText(getContext(), "The note has been added", Toast.LENGTH_SHORT).show();
             }
         });
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((DatePickerListener) requireActivity()).callDatePicker();
+            }
+        });
     }
+
 
     void saveNote()
     {
-        Note editNote = new Note(editTitle.getText().toString(), editDescription.getText().toString());
-        if(!(editTitle.getText().toString().equals("") && editDescription.getText().toString().equals("")))
+        Note editNote = new Note(editTitle.getText().toString(), editDescription.getText().toString(),
+                dateTextView.getText().toString());
+        if(!(editTitle.getText().toString().equals("") && editDescription.getText().toString().equals(""))){
             repo.create(editNote);
+        }
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
@@ -68,7 +103,16 @@ public class NoteFragment extends Fragment{
             item.setVisible(false);
             item1.setVisible(false);
             item2.setVisible(false);
+    }
 
+    void setDate(String date){
+        this.date = date;
+        dateTextView.setText(date);
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(DATE, date);
     }
 }

@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
+import com.geekbrains.notes.data.DatePickerListener;
 import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
 import com.geekbrains.notes.data.Repo;
@@ -36,9 +36,13 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
     private EditText description;
     public static final String NOTE = "NOTE";
     private BottomNavigationView bottomNavigationView;
+    private TextView dateTextView;
+    public static final String DATE = "DATE";
+    String saveInstanceDate;
+    private String date;
 
 
-    public static Fragment getInstance(Note note) {
+    public static EditNoteFragment getInstance(Note note) {
         EditNoteFragment editNoteFragment = new EditNoteFragment();
         Bundle args = new Bundle();
         args.putSerializable(NOTE, note);
@@ -59,8 +63,14 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
         bottomNavigationView.setOnItemSelectedListener(this);
         title = view.findViewById(R.id.edit_note_title);
         description = view.findViewById(R.id.edit_note_description);
+        dateTextView = view.findViewById(R.id.set_date);
 
-        init(note);
+        if (savedInstanceState == null) {
+            dateTextView.setText(date);
+        } else {
+            date = savedInstanceState.getString(DATE);
+            dateTextView.setText(date);
+        }
 
         Button buttonSave = view.findViewById(R.id.save_button);
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -71,12 +81,21 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
                 Toast.makeText(getContext(), "The note has been changed", Toast.LENGTH_SHORT).show();
             }
         });
+
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((DatePickerListener) requireActivity()).callDatePicker();
+            }
+        });
+        init(note);
     }
 
     //возвращение отредактированной заметки в NotesListFragment (через перезапись в репо)
 
     void saveNote() {
-        Note editNote = new Note(title.getText().toString(), description.getText().toString());
+        Note editNote = new Note(title.getText().toString(), description.getText().toString(),
+                dateTextView.getText().toString());
         editNote.setId(noteId);
         repo.update(editNote);
     }
@@ -86,6 +105,7 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
         note = (Note) args.getSerializable(NOTE);
         title.setText(note.getTitle());
         description.setText(note.getDescription());
+        dateTextView.setText(note.getDate());
         noteId = note.getId();
     }
 
@@ -120,5 +140,15 @@ public class EditNoteFragment extends Fragment implements NavigationBarView.OnIt
             item2.setVisible(false);
         }
 
+    }
+    void setDate(String date){
+        this.date = date;
+        dateTextView.setText(date);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(DATE, date);
     }
 }

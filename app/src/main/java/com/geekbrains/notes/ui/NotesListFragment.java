@@ -2,6 +2,7 @@ package com.geekbrains.notes.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.geekbrains.notes.recycler.NotesAdapter;
 
 public class NotesListFragment extends Fragment implements NotesAdapter.onNoteClickListener{
 
+    private Note note;
     private RecyclerView list;
     private NotesAdapter adapter;
     private Repo repo = InMemoryRepoImp.getInstance();
@@ -45,7 +47,7 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         list = view.findViewById(R.id.list);
-        adapter = new NotesAdapter();
+        adapter = new NotesAdapter(this);
         adapter.setOnNoteClickListener(this);
         adapter.setNotes(repo.getAll());
         // Граница между заметками
@@ -64,9 +66,32 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
             ((Controller) requireActivity()).openEditNoteFragment(note);
         }
     }
+
+    @Override
+    public void onNoteLongClick(Note note) {
+        this.note = note;
+    }
+
     public void refresh() {
         if(adapter != null)
             adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.note_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_delete_note:
+                repo.delete(note.getId());
+                refresh();
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 }

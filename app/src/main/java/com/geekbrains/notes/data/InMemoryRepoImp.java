@@ -12,21 +12,21 @@ public class InMemoryRepoImp implements Repo{
     }
 
     private void init() {
-        create(new Note("Title 1", "Description 1"));
-        create(new Note("Title 2", "Description 2"));
-        create(new Note("Title 3", "Description 3"));
-        create(new Note("Title 4", "Description 4"));
-        create(new Note("Title 5", "Description 5"));
-        create(new Note("Title 6", "Description 6"));
-        create(new Note("Title 7", "Description 7"));
-        create(new Note("Title 8", "Description 8"));
-        create(new Note("Title 9", "Description 9"));
-        create(new Note("Title 10", "Description 10"));
-        create(new Note("Title 11", "Description 11"));
-        create(new Note("Title 12", "Description 12"));
-        create(new Note("Title 13", "Description 13"));
-        create(new Note("Title 14", "Description 14"));
-        create(new Note("Title 15", "Description 15"));
+        create(new Note("Title 1", "Description 1", "date"));
+        create(new Note("Title 2", "Description 2", "date"));
+        create(new Note("Title 3", "Description 3", "date"));
+        create(new Note("Title 4", "Description 4", "date"));
+        create(new Note("Title 5", "Description 5", "date"));
+        create(new Note("Title 6", "Description 6", "date"));
+        create(new Note("Title 7", "Description 7", "date"));
+        create(new Note("Title 8", "Description 8", "date"));
+        create(new Note("Title 9", "Description 9", "date"));
+        create(new Note("Title 10", "Description 10", "date"));
+        create(new Note("Title 11", "Description 11", "date"));
+        create(new Note("Title 12", "Description 12", "date"));
+        create(new Note("Title 13", "Description 13", "date"));
+        create(new Note("Title 14", "Description 14", "date"));
+        create(new Note("Title 15", "Description 15", "date"));
     }
 
     public static InMemoryRepoImp getInstance(){
