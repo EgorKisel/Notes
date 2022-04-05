@@ -1,5 +1,6 @@
 package com.geekbrains.notes.ui;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,8 +18,11 @@ import androidx.fragment.app.FragmentManager;
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.DatePickerListener;
+import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
+import com.geekbrains.notes.data.Repo;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.GsonBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +33,8 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class NotesListActivity extends AppCompatActivity implements Controller, DatePickerListener {
 
-
+    // private SharedPreferences sharedPref = null;
+    public static final String KEY_SHARE = "KEY_SHARE";
     private FragmentManager manager;
     public static final String DEFAULT_FRAGMENT = "DEFAULT_FRAGMENT";
     public static final String LANDSCAPE_FRAGMENT = "LANDSCAPE_FRAGMENT";
@@ -38,6 +43,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
     private EditNoteFragment editNoteFragment;
     private NoteFragment noteFragment;
     private int orientation = ORIENTATION_PORTRAIT;
+    private Repo repo = InMemoryRepoImp.getInstance();
 
 
     @Override
@@ -47,6 +53,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
 
         setContentView(R.layout.drawer_main);
 
+//        sharedPref = getPreferences(MODE_PRIVATE);
 
         manager = getSupportFragmentManager();
 
@@ -188,6 +195,16 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         return true;
     }
+
+//        String savedNote = sharedPref.getString(KEY_SHARE, null);
+//        if (savedNote == null) {
+//            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Note note = new GsonBuilder().create().fromJson(savedNote,
+//                    Note.class);
+//            note.add.(note);
+//            note.setDate(note);
+//        }
 
 
     private void openSettingsFragment() {
