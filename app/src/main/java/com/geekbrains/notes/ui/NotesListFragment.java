@@ -1,5 +1,7 @@
 package com.geekbrains.notes.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -76,6 +78,7 @@ public class NotesListFragment extends Fragment implements NotesAdapter.onNoteCl
         if(adapter != null)
             adapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {

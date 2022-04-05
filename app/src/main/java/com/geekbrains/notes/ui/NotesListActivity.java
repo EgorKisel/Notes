@@ -18,7 +18,9 @@ import androidx.fragment.app.FragmentManager;
 import com.geekbrains.notes.R;
 import com.geekbrains.notes.data.Controller;
 import com.geekbrains.notes.data.DatePickerListener;
+import com.geekbrains.notes.data.InMemoryRepoImp;
 import com.geekbrains.notes.data.Note;
+import com.geekbrains.notes.data.Repo;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.GsonBuilder;
 
@@ -41,6 +43,7 @@ public class NotesListActivity extends AppCompatActivity implements Controller, 
     private EditNoteFragment editNoteFragment;
     private NoteFragment noteFragment;
     private int orientation = ORIENTATION_PORTRAIT;
+    private Repo repo = InMemoryRepoImp.getInstance();
 
 
     @Override

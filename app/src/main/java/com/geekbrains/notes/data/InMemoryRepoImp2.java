@@ -1,27 +1,18 @@
 package com.geekbrains.notes.data;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryRepoImp implements Repo{
+public class InMemoryRepoImp2 implements Repo{
 
-    private SharedPreferences sharedPreferences;
     private Gson gson = new Gson();
-    public static final String KEY_SP = "KEY_SP";
 
-    private static InMemoryRepoImp repo;
+    private static InMemoryRepoImp2 repo;
 
-    private InMemoryRepoImp(){
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(NotesApplication.getInstance());
-        notes = getAll();
-//        init();
+    private InMemoryRepoImp2(){
+        init();
     }
 
     private void init() {
@@ -42,14 +33,14 @@ public class InMemoryRepoImp implements Repo{
         create(new Note("Title 15", "Description 15", "date"));
     }
 
-    public static InMemoryRepoImp getInstance(){
+    public static InMemoryRepoImp2 getInstance(){
         if (repo == null){
-            repo = new InMemoryRepoImp();
+            repo = new InMemoryRepoImp2();
         }
         return repo;
     }
 
-    private List<Note> notes = new ArrayList<>();
+    private ArrayList<Note> notes = new ArrayList<>();
     private int counter = 0;
 
 
@@ -58,8 +49,6 @@ public class InMemoryRepoImp implements Repo{
         int id = counter++;
         note.setId(id);
         notes.add(note);
-        String data = gson.toJson(notes);
-        sharedPreferences.edit().putString(KEY_SP, data).apply();
         return id;
     }
 
@@ -77,8 +66,6 @@ public class InMemoryRepoImp implements Repo{
         for (int i = 0; i < notes.size(); i++){
             if (notes.get(i).getId() == note.getId()){
                 notes.set(i, note);
-                String data = gson.toJson(notes);
-                sharedPreferences.edit().putString(KEY_SP, data).apply();
                 break;
             }
         }
@@ -89,7 +76,6 @@ public class InMemoryRepoImp implements Repo{
         for (int i = 0; i < notes.size(); i++){
             if (notes.get(i).getId() == id){
                 notes.remove(i);
-                sharedPreferences.edit().remove(KEY_SP).apply();
                 break;
             }
 
@@ -99,16 +85,6 @@ public class InMemoryRepoImp implements Repo{
 
     @Override
     public List<Note> getAll() {
-        String data = sharedPreferences.getString(KEY_SP, "{}");
-        try {
-            notes = gson.fromJson(
-                    data, new TypeToken<List<Note>>(){}.getType());
-        }
-        catch (Exception e){
-            Log.d("happy", "Exception: " + e.getMessage());
-        }
-        if (notes == null)
-            notes = new ArrayList<>();
         return notes;
     }
 
